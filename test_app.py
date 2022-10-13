@@ -12,7 +12,7 @@ class TestAppClass(unittest.TestCase):
         self.app = app.test_client()
         self.assertEqual(app.debug, False)
 
-        # Deleting all old data in the pizza_house database
+        # Deleting all old data in the pizza_house_test database
         self.db = client['pizza_house']
         self.db.order.drop() 
 
