@@ -40,7 +40,6 @@ Links to the same can be found under the references section.
 <br>
 These are the steps to follow in order to run the project on local host: 
 <br>
-
 ```
 git clone https://github.com/swarajpande4/rh-py
 ```
@@ -68,7 +67,6 @@ The *consumer microservice* is started via the following command
 python consumer.py
 ```
 
-<br>
 The application (once started) can be tested via the following command 
 
 ```
