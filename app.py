@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, make_response, request, abort
-from flask_cors import CORS
 from http import HTTPStatus
 from pymongo import MongoClient
 from bson.objectid import ObjectId 
@@ -7,7 +6,6 @@ import json
 import pika
 
 app = Flask(__name__)
-CORS(app)
 
 client = MongoClient('localhost', 27017)
 db = client['pizza_house']
