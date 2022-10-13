@@ -24,6 +24,7 @@ def main():
         id = collection.insert_one(request_data).inserted_id 
         print(f" [x] Inserted {str(id)}")
         ch.basic_ack(delivery_tag=method.delivery_tag)  # Once the task is completed, send its acknowledgment
+        return id                                       # id response returned when acknowledgment has been sent
 
     channel.basic_consume(queue='order_queue', on_message_callback=callback)
 
