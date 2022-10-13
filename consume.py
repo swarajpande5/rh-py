@@ -19,7 +19,7 @@ def main():
     channel.queue_declare(queue='order_queue')
 
     def callback(ch, method, properties, body):
-        time.sleep(10)                                  # Any time consuming process ~ 10 seconds
+        # time.sleep(10)                                  # Any time consuming process ~ 10 seconds
         request_data = json.loads(body)
         id = collection.insert_one(request_data).inserted_id 
         print(f" [x] Inserted {str(id)}")

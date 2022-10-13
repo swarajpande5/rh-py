@@ -1,10 +1,13 @@
 from flask import Flask, jsonify, make_response, request, abort
+from flask_cors import CORS
+from http import HTTPStatus
 from pymongo import MongoClient
 from bson.objectid import ObjectId 
 import json
 import pika
 
 app = Flask(__name__)
+CORS(app)
 
 client = MongoClient('localhost', 27017)
 db = client['pizza_house']
@@ -14,55 +17,82 @@ collection = db['order']
 # 1. Welcome API
 @app.route('/welcome', methods=['GET'])
 def welcome():
-    response = make_response(
-        jsonify(
-            {"0": "Welcome to Pizza House"}
-        ), 
-        200,
-    )
-    return response 
+    try:
+        response = make_response(
+            jsonify(
+                {"0": "Welcome to Pizza House"}
+            ), 
+            HTTPStatus.OK,
+        )
+        return response
+    except:
+        response = make_response(
+            jsonify(
+                {"0:": "Error occurred!"}
+            ),
+            HTTPStatus.BAD_REQUEST
+        )
+        return response
+
 
 
 # 2. Accept Order API
 # @app.route('/order', methods=['POST'])
 # def order():
-#     request_data = request.get_json()
-#     id = collection.insert_one(request_data).inserted_id
+#     try:
+#         request_data = request.get_json()
+#         id = collection.insert_one(request_data).inserted_id
 
-#     response = make_response(
-#         jsonify(
-#             {'id': str(id)}
-#         ), 
-#         201,
-#     )
-#     return response 
+#         response = make_response(
+#             jsonify(
+#                 {'id': str(id)}
+#             ), 
+#             HTTPStatus.CREATED,
+#         )
+#         return response 
+#     except:
+#         response = make_response(
+#             jsonify(
+#                 {"0:": "Error occurred!"}
+#             ),
+#             HTTPStatus.BAD_REQUEST
+#         )
+#         return response
 
 
 # 3 Get order details APIs
 # 3.1. /getorders
 @app.route('/getorders', methods=['GET'])
 def getorders():
-    documents = collection.find()
-    response_list = [] 
-    for document in documents:
-        document['_id'] = str(document['_id'])
-        response_list.append(document)
-    
-    response = make_response(
-        jsonify(response_list), 
-        200,
-    )
-    return response 
+    try:
+        documents = collection.find()
+        response_list = [] 
+        for document in documents:
+            document['_id'] = str(document['_id'])
+            response_list.append(document)
+        
+        response = make_response(
+            jsonify(response_list), 
+            HTTPStatus.OK,
+        )
+        return response 
+    except:
+        response = make_response(
+            jsonify(
+                {"0:": "Error occurred!"}
+            ),
+            HTTPStatus.BAD_REQUEST
+        )
+        return response
 
 
 # 3.2 /getorders/id
 @app.errorhandler(404)
 def id_not_found(error):
-    return '', 404
+    return '', HTTPStatus.NOT_FOUND
 
 @app.route('/getorders/<order_id>', methods=['GET'])
 def getordersid(order_id):
-    
     documents = collection.find(
         {'_id': ObjectId(order_id)}
     )
@@ -103,10 +133,10 @@ def order():
         jsonify(
             {'0': "Order placed in queue"}
         ), 
-        200,
+        HTTPStatus.ACCEPTED,
     )
     return response 
 
 
 if __name__ == '__main__':
-    app.run(port=8080) 
+    app.run(port=8080, debug=True) 
