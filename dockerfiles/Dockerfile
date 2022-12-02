@@ -6,9 +6,9 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt 
 
-ENV PORT 8080 
+ENV PORT 5001 
 
-EXPOSE 8080 
+EXPOSE 5001
 
 ENTRYPOINT ["python"]
 

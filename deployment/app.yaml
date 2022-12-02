@@ -1,0 +1,23 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: pizza-house-app
+  labels:
+    app: pizza-house-app
+  namespace: prodigy--dev 
+spec:
+  replicas: 1 
+  selector: 
+    matchLabels:
+      app: pizza-house-app 
+  template:
+    metadata:
+      labels:
+        app: pizza-house-app 
+    spec:
+      containers:
+        - name: pizza-house-app 
+          image: docker://docker.io/swarajpande4/pizza-house-api:1.0.0
+          ports:
+          - containerPort: 8080 
+          imagePullPolicy: Always

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, make_response, request, abort
 from pymongo import MongoClient
 from bson.objectid import ObjectId 
+import socket
 
 app = Flask(__name__)
 
@@ -12,6 +13,11 @@ client = MongoClient('mongodb://mongo:27017/')
 
 db = client['pizza_house']
 collection = db['order']
+
+@app.route("/")
+def index():
+    hostname = socket.gethostbyname()
+    return jsonify(message=f"Welcome to the Pizza House! Running inside {hostname}!")
 
 # 1. Welcome API
 @app.route('/welcome', methods=['GET'])
@@ -84,4 +90,4 @@ def getordersid(order_id):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080) 
+    app.run(host='0.0.0.0', port=5001) 
